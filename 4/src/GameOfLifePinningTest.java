@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-@RunWith(MockitoJUnitRunner.class)
+
 public class GameOfLifePinningTest {
 	/*
 	 * READ ME: You may need to write pinning tests for methods from multiple
@@ -39,7 +39,7 @@ public class GameOfLifePinningTest {
 	 */
 
 	/* TODO: Declare all variables required for the test fixture. */
-	MainFrame mf;
+	
 	MainPanel mainP;
 	Cell[][] _cells;
 	int size;
@@ -71,6 +71,19 @@ public class GameOfLifePinningTest {
 	}
 
 	/* TODO: Write the three pinning unit tests for the three optimized methods */
+	
+	/*
+	 * Test case for Boolean iterateCell(x,y)
+	 * Preconditions:
+	 * 				- JRE 8 is installed
+	 * 				- The user has started the program by running run.bat 5
+	 * 				- MainPanel is initialized with blinker pattern
+	 * Execution steps: 
+	 * 				- set cell[2][1] to be alive by mocking getAlive() = true;
+	 * 				- call mainP.iterateCell(2,1)
+	 * Postcondition: Return value is true.
+	 * 
+	 */
 	@Test	
 	public void testIterateCell()
 	{		
@@ -80,6 +93,20 @@ public class GameOfLifePinningTest {
 		verify(mainP.getCells()[2][1], times(1)).getAlive();		
 	}
 
+	/*
+	 * Test case for void calculateNextIteration()
+	 * Preconditions:
+	 * 				- JRE 8 is installed
+	 * 				- The user has started the program by running run.bat 5
+	 * 				- MainPanel is initialized with blinker pattern
+	 * Execution steps: 
+	 * 				- call mainP.calculateNextIteration
+	 * 				- check that getAlive() is called for all the cells of mainP
+	 * 					 - by running verify(mainP.getCells()[j][k], atLeast(1)).getAlive();
+	 * 					 - for all cells	
+	 * Postcondition: verification passes for all cells.
+	 * 
+	 */
 	@Test
 	public void testCalculateNextIteration()
 	{
@@ -93,14 +120,27 @@ public class GameOfLifePinningTest {
 		}
 	}
 
+	/*
+	 * Test case for void Cells.toString()
+	 * Preconditions:
+	 * 				- JRE 8 is installed
+	 * 				- The user has started the program by running run.bat 5
+	 * 				- MainPanel is initialized with blinker pattern
+	 * Execution steps: 
+	 * 				- initialize single cell using Spy: Cell cell = spy(new Cell());
+	 * 				- set its text to "X"
+	 * 				- check that toString() values equal "X"
+	 * 				- verify that getText() is called one time.
+	 * Postcondition: check value is true and verification passes.
+	 * 
+	 */	
 	@Test
 	public void testCellToString()
 	{
 		mainP.setCells(_cells);
 		Cell cell = spy(new Cell());
 		cell.setText("X");
-		cell.toString();
+		assertEquals(cell.toString(),"X");
 		verify(cell,times(1)).getText();
-		
 	}
 }
