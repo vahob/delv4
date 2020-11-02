@@ -1,10 +1,16 @@
 import org.junit.*;
+import org.junit.runner.RunWith;
 import org.junit.runners.MethodSorters;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.internal.util.reflection.FieldSetter;
+import org.mockito.runners.MockitoJUnitRunner;
+
+import java.lang.reflect.Field;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
-
+@RunWith(MockitoJUnitRunner.class)
 public class GameOfLifePinningTest {
 	/*
 	 * READ ME: You may need to write pinning tests for methods from multiple
@@ -33,19 +39,66 @@ public class GameOfLifePinningTest {
 	 */
 
 	/* TODO: Declare all variables required for the test fixture. */
+	MainFrame mf;
+	MainPanel mainP;
+	Cell[][] _cells;
+	int size;
 
 	@Before
-	public void setUp() {
+	public void setUp() throws SecurityException, IllegalArgumentException, IllegalAccessException {
 		/*
 		 * TODO: initialize the text fixture. For the initial pattern, use the "blinker"
 		 * pattern shown in:
 		 * https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#Examples_of_patterns
 		 * The actual pattern GIF is at:
-		 * https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#/media/File:Game_of_life_blinker.gif
-		 * Start from the vertical bar on a 5X5 matrix as shown in the GIF.
+		 * https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life#/media/File:
+		 * Game_of_life_blinker.gif Start from the vertical bar on a 5X5 matrix as shown
+		 * in the GIF.
 		 */
+		size = 5;
+		//mf = new MainFrame(size);
+		mainP = new MainPanel(size);
+		_cells = new Cell[size][size];
+		for (int j = 0; j < size; j++) {
+			for (int k = 0; k < size; k++) {
+				_cells[j][k] = Mockito.mock(Cell.class);
+				if (k == 2 && (j == 1 || j == 2 || j == 2))
+					Mockito.when(_cells[j][k].getAlive()).thenReturn(true);
+				else
+					Mockito.when(_cells[j][k].getAlive()).thenReturn(false);
+			}
+		}		
 	}
 
 	/* TODO: Write the three pinning unit tests for the three optimized methods */
+
+	@Test	
+	public void testIterateCell()
+	{		
+		mainP.setCells(_cells);		
+		when(_cells[2][1].getAlive()).thenReturn(true);		
+		assertTrue(mainP.iterateCell(2, 1));		
+	}
+
+	@Test
+	public void testCalculateNextIteration()
+	{
+		
+		mainP.setCells(_cells);		
+		mainP.calculateNextIteration();		
+		for (int j = 0; j < size; j++) {
+			for (int k = 0; k < size; k++) {
+				verify(mainP.getCells()[j][k], atLeast(1)).getAlive();
+			}
+		}
+	}
+
+	@Test
+	public void testCellToString()
+	{		
+		Cell cell = new Cell();
+		cell.setText("X");
+		assertEquals(cell.toString(), "X");
+	}
 
 }
