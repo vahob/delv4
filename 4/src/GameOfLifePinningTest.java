@@ -76,7 +76,8 @@ public class GameOfLifePinningTest {
 	{		
 		mainP.setCells(_cells);		
 		when(_cells[2][1].getAlive()).thenReturn(true);		
-		assertTrue(mainP.iterateCell(2, 1));		
+		assertTrue(mainP.iterateCell(2, 1));
+		verify(mainP.getCells()[2][1], times(1)).getAlive();		
 	}
 
 	@Test
