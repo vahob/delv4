@@ -98,6 +98,8 @@ public class GameOfLifePinningTest {
 		mainP.setCells(_cells);
 		Cell cell = spy(new Cell());
 		cell.setText("X");
-		assertEquals(cell.toString(), "X");
+		cell.toString();
+		verify(cell,times(1)).getText();
+		
 	}
 }
