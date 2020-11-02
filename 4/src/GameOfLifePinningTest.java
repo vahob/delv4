@@ -71,7 +71,6 @@ public class GameOfLifePinningTest {
 	}
 
 	/* TODO: Write the three pinning unit tests for the three optimized methods */
-
 	@Test	
 	public void testIterateCell()
 	{		
@@ -95,10 +94,10 @@ public class GameOfLifePinningTest {
 
 	@Test
 	public void testCellToString()
-	{		
-		Cell cell = new Cell();
+	{
+		mainP.setCells(_cells);
+		Cell cell = spy(new Cell());
 		cell.setText("X");
 		assertEquals(cell.toString(), "X");
 	}
-
 }
